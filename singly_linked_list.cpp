@@ -227,7 +227,7 @@ bool singly_linked_list<T>::remove_at(int index)
   try
   {
     // Verify the given index
-    if (this->len <= 0 || index < 0 || index > this->len)
+    if (this->len <= 0 || index < 0 || index >= this->len)
     {
       throw runtime_error("Exception: Illegal operation called");
     }
@@ -279,5 +279,6 @@ void singly_linked_list<T>::remove_all()
     temp = head;
     delete temp;
     head = head->next;
+    this->len--;
   }
 }
