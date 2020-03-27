@@ -21,7 +21,7 @@ struct node
 };
 
 template <typename T>
-class doubly_linked_list
+class doubly_linked_list : public list<T>
 { // Doubly Linked List implementation *Zero Based Indexing*
 private:
     int len;                           // Hold the current length of the doubly linked list
