@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include <exception>
-#include "list.cpp"
 
 using namespace std;
 
