@@ -235,12 +235,3 @@ bool miller_rabin_deterministic(u64 n) {
     return true;
 }
 
-int main () {
-  FASTIO
-  ll n;
-  cin >> n;
-  cout << boolalpha << probably_prime_fermat(n) << '\n';
-  return 0;
-}
-
-
