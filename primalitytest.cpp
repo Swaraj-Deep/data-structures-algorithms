@@ -235,3 +235,30 @@ bool miller_rabin_deterministic(u64 n) {
     return true;
 }
 
+vector<ll> sieve(ll n) {
+  vector<ll> prime (n + 1, 1);
+  prime[0] = 0;
+  prime[1] = 0;
+  for (ll i = 2; i <= n; ++i) {
+    if (prime[i] == 1 && i * i <= n) {
+      for (ll j = i * i; j <= n; j += i) {
+        prime[j] = 0;
+      }
+    }
+  }
+  return prime;
+}
+
+int main () {
+  FASTIO
+  int n;
+  cin >> n;
+  vector<ll> ans = sieve (n);
+  for (int i = 0; i < ans.size (); ++i) {
+    if (ans[i]) {
+      cout << i << ' ';
+    }
+  }
+  return 0;
+}
+
