@@ -249,14 +249,50 @@ vector<ll> sieve(ll n) {
   return prime;
 }
 
+vector<bool> segmented_sieve (ll l, ll r) {
+  ll limit = sqrt (r);
+  vector<bool> mark (limit + 1, false);
+  vector<ll> primes;
+  for (ll i = 2; i <= limit; ++i) {
+    if (!mark[i]) {
+      primes.emplace_back (i);
+      for (ll j = i * i; j <= limit; j += i) {
+        mark[j] = true;
+      }
+    }
+  }
+  vector<bool> is_prime (r - l + 1, true);
+  for (ll i: primes) {
+    ll curr_prime = i;
+    ll base = (l / (curr_prime)) * (curr_prime);
+    if (base < l) {
+      base = base + curr_prime;
+    }
+    for (ll j = base; j <= r; j += curr_prime) {
+      is_prime[j - l] = false;
+    }
+    if (base == curr_prime) {
+      is_prime[base - l] = true;
+    }
+  }
+  if (l == 1) {
+    is_prime[0] = false;
+  }
+  return is_prime;
+}
+
 int main () {
   FASTIO
-  int n;
-  cin >> n;
-  vector<ll> ans = sieve (n);
-  for (int i = 0; i < ans.size (); ++i) {
-    if (ans[i]) {
-      cout << i << ' ';
+  int t;
+  cin >> t;
+  while (t--) {
+    ll l, r;
+    cin >> l >> r;
+    vector<bool> primes = segmented_sieve (l, r);
+    for (ll i = 0; i <= r - l; ++i) {
+      if (primes[i]) {
+        cout << i + l << '\n';
+      }
     }
   }
   return 0;
