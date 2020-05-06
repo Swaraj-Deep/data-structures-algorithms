@@ -26,21 +26,24 @@ private:
     int len;                               // Keeps track of current number of elements in the BST
     node<T> *root;                         // stores the root node of the BST
     node<T> *get_new_node(const T &);      // get the new node for the BST
-    void remove_all();                     // Remove all the nodes from the BST
+    void remove_all(node<T> *);            // Remove all the nodes from the BST
     node<T> *insert(node<T> *, const T &); // helper to insert the node to the BST
     node<T> *search(node<T> *, const T &); // helper to search for the data in BST
 public:
-    BST();                            // Constructor of the BST
-    ~BST();                           // Destructor of the BST
-    int get_length();                 // Get the length of the BST
-    void add(const T &);              // Add the given element to the BST
-    node<T> *find(const T &);         // Check whether the given element is present in the BST or not
-    node<T> *get_root();              // get the root of the BST
-    bool remove(const T &);           // Remove a given node from the BST
-    void print_preorder(node<T> *);   // Prints the preorder of the BST
-    void print_inorder(node<T> *);    // Prints the inorder of the BST
-    void print_postorder(node<T> *);  // Prints the postorder of the BST
-    void print_levelorder(node<T> *); // Prints the levelorder of the BST
+    BST();                                 // Constructor of the BST
+    ~BST();                                // Destructor of the BST
+    int get_length();                      // Get the length of the BST
+    void add(const T &);                   // Add the given element to the BST
+    node<T> *find(const T &);              // Check whether the given element is present in the BST or not
+    node<T> *get_root();                   // get the root of the BST
+    bool remove(const T &);                // Remove a given node from the BST
+    void print_preorder(node<T> *);        // Prints the preorder of the BST
+    void print_inorder(node<T> *);         // Prints the inorder of the BST
+    void print_postorder(node<T> *);       // Prints the postorder of the BST
+    void print_levelorder(node<T> *);      // Prints the levelorder of the BST
+    node<T> *inorder_successor(node<T> *); // Returns the reference to the inorder successor of the given node roference
+    node<T> *find_min(node<T> *);          // Returns the reference to the minimum element in the passed reference
+    node<T> *find_max(node<T> *);          // Returns the reference to the maxm element in the passed reference
 };
 
 template <typename T>
@@ -63,7 +66,7 @@ node<T> *BST<T>::get_new_node(const T &data)
 template <typename T>
 BST<T>::~BST()
 {
-    cout << "Called Destructor\n";
+    remove_all(this->root);
 }
 
 template <typename T>
@@ -83,13 +86,13 @@ node<T> *BST<T>::insert(node<T> *root_ptr, const T &data)
 {
     if (root_ptr == NULL)
     {
-        root_ptr = get_new_node(data);
+        return get_new_node(data);
     }
     else if (data < root_ptr->data)
     {
         root_ptr->left = insert(root_ptr->left, data);
     }
-    else
+    else if (data > root_ptr->data)
     {
         root_ptr->right = insert(root_ptr->right, data);
     }
@@ -166,6 +169,71 @@ void BST<T>::print_postorder(node<T> *root_ptr)
     cout << root_ptr->data << ' ';
 }
 
+template <typename T>
+node<T> *BST<T>::find_min(node<T> *root_ptr)
+{
+    while (root_ptr->left != NULL)
+    {
+        root_ptr = root_ptr->left;
+    }
+    return root_ptr;
+}
+
+template <typename T>
+node<T> *BST<T>::find_max(node<T> *root_ptr)
+{
+    while (root_ptr->right != NULL)
+    {
+        root_ptr = root_ptr->right;
+    }
+    return root_ptr;
+}
+
+template <typename T>
+void BST<T>::remove_all(node<T> *root_ptr)
+{
+    if (root_ptr == NULL)
+    {
+        return;
+    }
+    remove_all(root_ptr->left);
+    remove_all(root_ptr->right);
+    delete root_ptr;
+}
+
+template <typename T>
+node<T> *BST<T>::inorder_successor(node<T> *root_ptr)
+{
+    if (root_ptr == NULL)
+    {
+        return NULL;
+    }
+    // Now if the node has a right subtree return the minimum of that subtree
+    if (root_ptr->right != NULL)
+    {
+        return find_min(root_ptr->right);
+    }
+    else
+    {
+        // Traverse the tree from the root node until that value is found (value=>node of which successor is to be found)
+        node<T> *successor = NULL;
+        node<T> *ancestor = this->root;
+        while (ancestor != root_ptr)
+        {
+            if (root_ptr->data < ancestor->data)
+            {
+                successor = ancestor;
+                ancestor = ancestor->left;
+            }
+            else
+            {
+                ancestor = ancestor->right;
+            }
+        }
+        return successor;
+    }
+}
+
 int main()
 {
     BST<int> tree;
@@ -176,17 +244,21 @@ int main()
             break;
         tree.add(ch);
     }
-    tree.print_preorder(tree.get_root());
-    cout << '\n';
     tree.print_inorder(tree.get_root());
     cout << '\n';
-    tree.print_postorder(tree.get_root());
-    cout << '\n';
-    tree.print_postorder(tree.find(15));
-    cout << '\n';
-    tree.print_preorder(tree.find(15));
-    cout << '\n';
-    tree.print_inorder(tree.find(15));
-    cout << '\n';
+    node<int> *node_ref = tree.find_min(tree.get_root());
+    cout << node_ref->data << '\n';
+    node_ref = tree.find_max(tree.get_root());
+    cout << node_ref->data << '\n';
+    cout << tree.find(120)->data << ' ';
+    cout << tree.inorder_successor (tree.find (120))->data << ' ';
+    cout << tree.inorder_successor (tree.find (23))->data << ' ';
+    cout << tree.inorder_successor (tree.find (15))->data << ' ';
+    cout << tree.inorder_successor (tree.find (32))->data << ' ';
+    cout << tree.inorder_successor (tree.find (26))->data << ' ';
+    cout << tree.inorder_successor (tree.find (12))->data << ' ';
+    cout << tree.inorder_successor (tree.find (14))->data << ' ';
+    // cout << tree.inorder_successor (tree.find (123))->data << ' ';
+    cout << tree.inorder_successor (tree.find (56))->data << ' ';
     return 0;
 }
