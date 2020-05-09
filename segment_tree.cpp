@@ -63,8 +63,17 @@ void point_update_tree(vector<int> &tree, int index, int start, int end, int upd
     }
     // Partial Overlap Calling both sides of the tree
     int mid = start + ((end - start) / 2);
-    point_update_tree(tree, 2 * index, start, mid, update_index, value);
-    point_update_tree(tree, 2 * index + 1, mid + 1, end, update_index, value);
+    // point_update_tree(tree, 2 * index, start, mid, update_index, value);
+    // point_update_tree(tree, 2 * index + 1, mid + 1, end, update_index, value);
+    // Check which part to update
+    if (update_index <= mid)
+    {
+        point_update_tree(tree, 2 * index, start, mid, update_index, value);
+    }
+    else
+    {
+        point_update_tree(tree, 2 * index + 1, mid + 1, end, update_index, value);
+    }
     tree[index] = min(tree[2 * index], tree[2 * index + 1]);
     return;
 }
@@ -72,18 +81,20 @@ void point_update_tree(vector<int> &tree, int index, int start, int end, int upd
 void range_update_tree(vector<int> &tree, int index, int start, int end, int r_start, int r_end, int value)
 {
     // No overlap
-    if (r_end < start || r_start > end) {
+    if (r_end < start || r_start > end)
+    {
         return;
     }
     // Reached Leaf Node
-    if (start == end){
+    if (start == end)
+    {
         tree[index] = value;
         return;
     }
     // Partial Overlap
     int mid = start + ((end - start) / 2);
-    range_update_tree (tree, 2 * index, start, mid, r_start, r_end, value);
-    range_update_tree (tree, 2 * index + 1, mid + 1, end, r_start, r_end, value);
-    tree[index] = min (tree[2 * index], tree[2 * index + 1]);
+    range_update_tree(tree, 2 * index, start, mid, r_start, r_end, value);
+    range_update_tree(tree, 2 * index + 1, mid + 1, end, r_start, r_end, value);
+    tree[index] = min(tree[2 * index], tree[2 * index + 1]);
     return;
 }
