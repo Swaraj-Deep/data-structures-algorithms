@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -47,7 +46,7 @@ vector<int> kmp_search(string pattern, string text)
         {
             // We insert the position of the starting index of the pattern in the vector of positions
             pos.push_back(i - j);
-            // Readjusting the j 
+            // Readjusting the j
             j = pi[j - 1];
         }
         else if (pattern[j] != text[i]) // The pattern and text doesnot matches so adjust the j pointer
@@ -64,14 +63,4 @@ vector<int> kmp_search(string pattern, string text)
         }
     }
     return pos;
-}
-
-int main()
-{
-    string s, text;
-    getline(cin, text);
-    getline(cin, s);
-    vector<int> a = kmp_search(s, text);
-    for_each (begin (a), end (a), [](int x) {cout << x << ' ';});
-    return 0;
 }
