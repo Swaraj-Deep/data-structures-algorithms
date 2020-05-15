@@ -3,14 +3,6 @@
 
 using namespace std;
 
-// // Node Structure for a Trie
-// struct trie_node
-// {
-//     char val;                    // What is the value of that node
-//     int count;                   // How many node is with that value
-//     int ends_here;               // How many strings ends at that node
-//     trie_node *child[CHAR_SIZE]; // Array of pointers to hold the children CHAR_SIZE may vary. In this implementation it is only for lower case english alphabets
-// };
 class trie
 {
     // Node Structure for a Trie
@@ -44,6 +36,9 @@ public:
     int starts_with(const string &);
     bool is_empty(const trie_node *);
     bool have_children(const trie_node *);
+    trie_node* get_root () {
+        return root;
+    }
 };
 
 // Function to check is trie is empty or not
@@ -137,5 +132,6 @@ int main()
         cout << boolalpha << trie_root.search(s) << ' ';
         cout << trie_root.starts_with(s) << '\n';
     }
+    cout << trie_root.have_children (trie_root.get_root ()) << '\n';
     return 0;
 }
