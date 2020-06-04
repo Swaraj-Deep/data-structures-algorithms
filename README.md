@@ -1,4 +1,4 @@
-# data-structures
+# data-structures-algorithms
 Repository for data structures implementation in cpp
 
 ## Usage 
