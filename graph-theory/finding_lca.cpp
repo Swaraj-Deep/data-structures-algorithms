@@ -29,7 +29,7 @@ void dfs_search(int vertex, vector<vector<int>> &graph, vector<bool> &visited, v
     }
 }
 
-// Naive method for lowest common ancestor
+// Naive method for lowest common ancestor Time Complexity: O(N) Space Complexity: O(N)
 int lowest_common_ancestor(int a, int b, vector<int> &parent, vector<int> &depth)
 {
     // Calculate depth of both node
