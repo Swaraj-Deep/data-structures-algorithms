@@ -22,7 +22,7 @@ struct edge
 void bellman_ford(int root, vector<edge> &graph, vector<int> &distance, int vertices, int edges, int d = 0)
 {
     distance[root] = d;
-    for (int i = 1; i <= vertices; ++i)
+    for (int i = 1; i < vertices; ++i)
     {
         // Relax all distances for number of vertices times
         for (int j = 0; j < edges; ++j)
@@ -43,7 +43,7 @@ void bellman_ford_enhanced(int root, vector<edge> &graph, vector<int> &distance,
     for (;;)
     {
         bool any_change = false;
-        for (int i = 1; i <= vertices; ++i)
+        for (int i = 1; i < vertices; ++i)
         {
             for (int j = 0; j < edges; ++j)
             {
@@ -73,7 +73,7 @@ void bellman_ford_path_enhanced(int root, vector<edge> &graph, vector<int> &dist
     for (;;)
     {
         bool any_change = false;
-        for (int i = 1; i <= vertices; ++i)
+        for (int i = 1; i < vertices; ++i)
         {
             for (int j = 0; j < edges; ++j)
             {
@@ -112,12 +112,14 @@ void bellman_ford_negative_cycle(int root, vector<edge> &graph, vector<int> &dis
                     x = graph[j].from;
                 }
     }
+    // if we cannot relax in the last iteration then there is no negativ cycle
     if (x == -1)
     {
         cout << "No negative cycle from " << root << '\n';
     }
     else
     {
+        // We have a negative cycle so we have to find that
         int y = x;
         for (int i = 1; i <= vertices; ++i)
         {
